@@ -1,7 +1,5 @@
 .aider*
-*offline/*
 
-PROMPTS_EXAMPLES.md
 bin
 obj
 csx
