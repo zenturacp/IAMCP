@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IAMCP Event Registration</title>
+    <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        function EventRegistration() {
+            const [formData, setFormData] = React.useState({
+                name: '',
+                email: '',
+                company: '',
+                phone: ''
+            });
+            const [response, setResponse] = React.useState(null);
+
+            const handleChange = (e) => {
+                setFormData({...formData, [e.target.name]: e.target.value});
+            };
+
+            const handleSubmit = async (e) => {
+                e.preventDefault();
+                try {
+                    const res = await fetch('http://localhost:7071/api/echoJson', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(formData),
+                    });
+                    const data = await res.json();
+                    setResponse(data);
+                } catch (error) {
+                    console.error('Error:', error);
+                }
+            };
+
+            return (
+                <div className="container mx-auto px-4 py-8">
+                    <header className="text-center mb-8">
+                        <img src="https://cdn.ymaws.com/iamcp.site-ym.com/graphics/logo.png" alt="IAMCP Logo" className="mx-auto mb-4" />
+                        <h1 className="text-3xl font-bold text-blue-800">IAMCP Event Registration</h1>
+                    </header>
+                    <div className="max-w-2xl mx-auto bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+                        <h2 className="text-2xl font-semibold mb-4 text-gray-700">Event Description</h2>
+                        <p className="mb-6 text-gray-600">Join us for an exciting IAMCP event where we'll discuss the latest trends in technology and networking opportunities for our members.</p>
+                        <form onSubmit={handleSubmit}>
+                            <div className="mb-4">
+                                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="name">
+                                    Name
+                                </label>
+                                <input 
+                                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
+                                    id="name" 
+                                    type="text" 
+                                    name="name"
+                                    value={formData.name}
+                                    onChange={handleChange}
+                                    required
+                                />
+                            </div>
+                            <div className="mb-4">
+                                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="email">
+                                    Email
+                                </label>
+                                <input 
+                                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
+                                    id="email" 
+                                    type="email" 
+                                    name="email"
+                                    value={formData.email}
+                                    onChange={handleChange}
+                                    required
+                                />
+                            </div>
+                            <div className="mb-4">
+                                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="company">
+                                    Company
+                                </label>
+                                <input 
+                                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
+                                    id="company" 
+                                    type="text" 
+                                    name="company"
+                                    value={formData.company}
+                                    onChange={handleChange}
+                                    required
+                                />
+                            </div>
+                            <div className="mb-6">
+                                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="phone">
+                                    Phone Number
+                                </label>
+                                <input 
+                                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
+                                    id="phone" 
+                                    type="tel" 
+                                    name="phone"
+                                    value={formData.phone}
+                                    onChange={handleChange}
+                                    required
+                                />
+                            </div>
+                            <div className="flex items-center justify-between">
+                                <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
+                                    Register
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                    {response && (
+                        <div className="max-w-2xl mx-auto mt-8 bg-white shadow-md rounded px-8 pt-6 pb-8">
+                            <h2 className="text-2xl font-semibold mb-4 text-gray-700">Registration Confirmation</h2>
+                            <pre className="bg-gray-100 p-4 rounded overflow-x-auto">
+                                {JSON.stringify(response, null, 2)}
+                            </pre>
+                        </div>
+                    )}
+                </div>
+            );
+        }
+
+        ReactDOM.render(<EventRegistration />, document.getElementById('root'));
+    </script>
+</body>
+</html>
